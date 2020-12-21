@@ -37,6 +37,8 @@ B. Then go to the cloned folder `cd Cryptocurrency-Price-Prediction-Market`
 
 Now there are 2 parts of the dapp, smart contract deployment on testnet and running client locally to interact with the smart contract deployed.
 
+if you are plannig to use already deployed smart contract with localhost:3000, please go to step D. You do not need to fund market factory with LINK tokens then.
+
 C. **Smart Contracts**
 
 As this truffle project, we need to do the following for deployment of smart contracts on KOVAN Testnet.
