@@ -19,8 +19,11 @@ A decentralised prediction market for cryptocurrency price where end-users can p
 ## Directory structure
 
 **client** - react code for UI & integration using web3.js
+
 **contract** - all smart contracts in solidity
+
 **migrations** - Migrations file to be used by Truffle to deplot the contract on KOVAN Testnet
+
 **test** - Unit Testing done in Mocha for the smart contracts
 
 ![final-project-consenSys](https://user-images.githubusercontent.com/24249646/102808156-e98f8180-43e5-11eb-89d1-3c08cb673f5e.png)
