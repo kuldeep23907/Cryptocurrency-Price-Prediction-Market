@@ -46,7 +46,7 @@ When we deploy smart contracts and run the client app to interact with it, we wo
 
 **Before that, as we are using Chainlink Oracle to resolve our market, we need to have LINK tokens to do the same. So, once you have deployed the smart contract and client app is running, you can see the Market Factory address at the header. Send 1 or 2 LINKs to that address to proceed forward. In case you do not have LINKs tokens for KOVAN testnet, please visit here https://docs.chain.link/docs/link-token-contracts#kovan . Get some tokens from the faucet and add this custom token in your metamask wallet 0xa36085F69e2889c224210F603D836748e7dC0088. Remember it's 0.1 LINK per market which will be created.**
 
-Once the market factory contract is funded with LINK tokens, please follow the attached video link or https://raw.githubusercontent.com/kuldeep23907/Cryptocurrency-Price-Prediction-Market/main/use_the_dapp.md to know about how to use the dapp.
+Once the market factory contract is funded with LINK tokens, please follow the attached video link or https://github.com/kuldeep23907/Cryptocurrency-Price-Prediction-Market/blob/main/use_the_dapp.md to know about how to use the dapp.
 
 
 
