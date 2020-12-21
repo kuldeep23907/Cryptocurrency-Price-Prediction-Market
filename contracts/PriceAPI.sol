@@ -7,13 +7,16 @@
 
 pragma solidity >=0.6.0;
 
-import "https://raw.githubusercontent.com/smartcontractkit/chainlink/develop/evm-contracts/src/v0.6/ChainlinkClient.sol";
+import "@chainlink/contracts/src/v0.6/ChainlinkClient.sol";
 
 contract APIConsumer is ChainlinkClient {
   
-    
-    uint public resultAmount;
+    uint public expectedAmount;
+    uint public action;
     bool public marketResolved;
+    uint public resultAmount;
+    bool public finalWinner;
+
     address private oracle;
     bytes32 private jobId;
     uint256 private fee;
@@ -36,7 +39,7 @@ contract APIConsumer is ChainlinkClient {
      * Create a Chainlink request to retrieve API response, find the target
      * data, then multiply by 1000000000000000000 (to remove decimal places from data).
      */
-    function requestVolumeData(string memory token1, string memory token2) public returns (bytes32 requestId) 
+    function requestVolumeData(string memory token1, string memory token2, uint _action, uint _expectedAmount) public returns (bytes32 requestId) 
     {
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         
@@ -46,7 +49,8 @@ contract APIConsumer is ChainlinkClient {
         // Multiply the result by 1000000000000000000 to remove decimals
         int timesAmount = 10**18;
         request.addInt("times", timesAmount);
-        
+        action = _action;
+        expectedAmount = _expectedAmount;
         // Sends the request
         return sendChainlinkRequestTo(oracle, request, fee);
     }
@@ -58,6 +62,13 @@ contract APIConsumer is ChainlinkClient {
     {
         resultAmount = _volume;
         marketResolved = true;
+        if(action == 0) {
+            finalWinner = expectedAmount * (10**18) > resultAmount;
+        } else if (action == 1) {
+            finalWinner = expectedAmount * (10**18) < resultAmount;
+        } else {
+            finalWinner = expectedAmount * (10**18) == resultAmount;
+        }
     }
     
     /**

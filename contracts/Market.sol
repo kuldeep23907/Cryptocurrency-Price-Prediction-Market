@@ -1,8 +1,8 @@
 pragma solidity >=0.6.0;
 pragma experimental ABIEncoderV2;
 import './PriceAPI.sol';
-import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/math/SafeMath.sol";
-import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/master/contracts/utils/ReentrancyGuard.sol";
+// import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /// @title Interface for Market Contract
 /// @author Kuldeep K Srivastava
@@ -26,6 +26,7 @@ interface IMarket {
         uint yesPrice;
         uint noPrice;
         bool result;
+        uint totalBet;
     }
     
     
@@ -63,7 +64,7 @@ interface IMarket {
 /// @author Kuldeep K. Srivastava
 contract Market is IMarket,ReentrancyGuard,APIConsumer {
     
-    using SafeMath for uint;
+    // using SafeMath for uint256;
     
     //  @notice  Address of the user who created this market
     //  @return Returns market owner's address
@@ -71,7 +72,7 @@ contract Market is IMarket,ReentrancyGuard,APIConsumer {
 
     MarketDetails private M;
     
-    mapping(address => Prediction) private predictions;
+    mapping(address => Prediction) public predictions;
     mapping(address => bool) private predictors;
     
     constructor (
@@ -96,13 +97,14 @@ contract Market is IMarket,ReentrancyGuard,APIConsumer {
         M.noVotes = 0;
         M.yesPrice = 50 wei;
         M.noPrice= 50 wei;
+        M.totalBet = 0;
     }
     
-    bool private stopped = false;
+    bool public stopped = false;
 
-    modifier stopInEmergency { require(!stopped); _; }
+    modifier stopInEmergency { require(!stopped, "stopped in emergency"); _; }
     
-    modifier onlyInEmergency { require(stopped); _; }
+    modifier onlyInEmergency { require(stopped, "only in emergency"); _; }
     
     modifier marketActive() {
         require(M.endTime >= block.timestamp,"Market is not accepting prediction anymore");
@@ -170,6 +172,7 @@ contract Market is IMarket,ReentrancyGuard,APIConsumer {
         
         predictions[msg.sender] = p;
         predictors[msg.sender] = true;
+        M.totalBet = M.totalBet.add(msg.value);
         emit predicted(msg.sender, _verdict, _share);
         return true;
     }
@@ -184,9 +187,13 @@ contract Market is IMarket,ReentrancyGuard,APIConsumer {
         // change result value
         // change State to inactive
         require(msg.sender == marketOwner || predictors[msg.sender], "Not authorised");
-        // resultAmount = 400;
-        // marketResolved = true;
-        requestVolumeData(M.token1, M.token2);
+        if(M.action == Action.lt) {
+            requestVolumeData(M.token1, M.token2, 0 , M.amount);
+        } else if(M.action == Action.gt) {
+            requestVolumeData(M.token1, M.token2, 1, M.amount);
+        } else {
+            requestVolumeData(M.token1, M.token2, 2, M.amount);
+        }
         M.state = State.inactive;
         stopped = true;
         emit resultDeclared(address(this), msg.sender);
@@ -196,7 +203,7 @@ contract Market is IMarket,ReentrancyGuard,APIConsumer {
     //  @notice Allows user to withdraw their winning amount after market is resolved
     //  @dev It uses withdrawl pattern
     //  @return Returns true if successful
-    function withdraw() public override marketInactive onlyInEmergency nonReentrant returns(bool) {
+    function withdraw() public override marketInactive nonReentrant onlyInEmergency returns(bool) {
         // withdrawl pattern
         // check user has deposited
         // calculate amount to pay
@@ -205,33 +212,26 @@ contract Market is IMarket,ReentrancyGuard,APIConsumer {
         // tranfer eth to the user
         require(predictors[msg.sender], "Not authorised");
         require(predictions[msg.sender].share != 0, "Already withdrawn");
-        bool finalResult = false;
-        if(M.action == Action.lt) {
-            finalResult = M.amount.mul(10**18) < resultAmount;
-        } else if(M.action == Action.gt) {
-            finalResult = M.amount.mul(10**18) > resultAmount;
-        } else {
-            finalResult = M.amount.mul(10**18) == resultAmount;
-        }
         Prediction memory p = predictions[msg.sender];
-        
-        require(finalResult == p.verdict, "Sorry you lost");
+        require(finalWinner == p.verdict, "Sorry you lost");
         uint winningAmount;
-        if(finalResult){
-            winningAmount = (address(this).balance).div(M.yesVotes);
+        if(finalWinner){
+            winningAmount = (M.totalBet).div(M.yesVotes);
         } else {
-            winningAmount = (address(this).balance).div(M.noVotes);
+            winningAmount = (M.totalBet).div(M.noVotes);
         }
-        require(address(this).balance >= (winningAmount.mul(p.share)), "Not enough balance");
-        msg.sender.transfer(winningAmount.mul(p.share));
-        emit withdrawAmount(msg.sender, winningAmount.mul(p.share));
         predictions[msg.sender].share = 0;
+        uint amountToTake = winningAmount;
+        require(address(this).balance >= amountToTake, "Not enough balance");
+        msg.sender.transfer(amountToTake);
+        emit withdrawAmount(msg.sender, amountToTake);
         return true;
     }
+
+    function circuitBreakerStop() public returns(bool) {
+        require(msg.sender == marketOwner);
+        stopped = true;
+    }
     
-    // no price becomes 0 after first votes
-    // noprice + yesPrice sometimes < 100 eg. 66 + 33
     // upgradablility
-    // share is not regarded in calculating final winning prize
-    // calculate winning prize only once when result comes from API 
 }

@@ -1,5 +1,6 @@
 pragma solidity >=0.6.0;
 import './Market.sol';
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title Cryptocurrency Price Prediction Market factory Contract
 /// @notice Factory that allows end-users to create new markets
@@ -23,7 +24,8 @@ contract PricePredictionMarketFactory {
     function createMarket(string memory token1, string memory token2, IMarket.Action action, uint amount, uint interval) public returns(address) {
         address newMarket = address(new Market(msg.sender, token1, token2, action, amount, interval));
         markets.push(newMarket);
-        emit marketCreated(newMarket, Market(newMarket).M.endTime);
+        IERC20(address(0xa36085F69e2889c224210F603D836748e7dC0088)).transfer(newMarket, 10**17);
+        emit marketCreated(newMarket, block.timestamp + interval);
         return newMarket;
     }
     
@@ -31,5 +33,16 @@ contract PricePredictionMarketFactory {
     //  @return All the markets addressess
     function getAllMarkets() public view returns(address[] memory) {
         return markets;
+    }
+    
+     /**
+     * Withdraw LINK from this contract
+     * 
+     * NOTE: DO NOT USE THIS IN PRODUCTION AS IT CAN BE CALLED BY ANY ADDRESS.
+     * THIS IS PURELY FOR EXAMPLE PURPOSES ONLY.
+     */
+    function withdrawLink() external {
+        IERC20 c =  IERC20(address(0xa36085F69e2889c224210F603D836748e7dC0088));
+        c.transfer(msg.sender, c.balanceOf(address(this)));
     }
 }
