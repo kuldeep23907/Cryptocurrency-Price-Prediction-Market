@@ -1,13 +1,13 @@
-# Crypto-Price-Prediction-Market
+# :bank: Crypto-Price-Prediction-Market
 A decentralised prediction market for cryptocurrency price where end-users can predict for outcomes and earn profits. The market's are resolved using Oracle to avoid any centralised party for market resolution.
 
-## Features
+## :rocket: Features
 1. Users can create a market by selecting the crypto-currency symbol(ETH, BTC, USDC, DAI etc. ), amount in USD, action (less than, more than, equal to) and time interval in seconds.
 2. Users can predict as yes or no for all the existing projects for which participation is still active.
 3. Once prediction phase is over (currenTime > endTime of market), any of the user who either created or participated in the market can resolve the market by clicking on the resolve button.
 4. Once market is resolved, all the users who have predicted and are correct, can withdraw their fair share from the market immediately.
 
-## Development Stack
+## :construction: Development Stack
 
 1. Ethereum && Solidity >=0.6.0
 2. Truffle Framework
@@ -16,7 +16,7 @@ A decentralised prediction market for cryptocurrency price where end-users can p
 5. React framework
 6. Mocha Testing
 
-## Directory structure
+## :beginner: Directory structure
 
 **client** - react code for UI & integration using web3.js
 
@@ -29,7 +29,7 @@ A decentralised prediction market for cryptocurrency price where end-users can p
 ![final-project-consenSys](https://user-images.githubusercontent.com/24249646/102808156-e98f8180-43e5-11eb-89d1-3c08cb673f5e.png)
 
 
-## How to run locally
+## :car: How to run locally
 
 A. Clone this repository in your local system using `git clone git@github.com:kuldeep23907/Cryptocurrency-Price-Prediction-Market.git`
 
@@ -55,7 +55,7 @@ D. **Running Client App**
 3. Run `npm start`
 4. Now the client will be running locally at `http://localhost:3000`
 
-## How to use the dapp
+## :factory: How to use the dapp
 
 When we deploy smart contracts and run the client app to interact with it, we won't see any market. We need to create new markets and then users can participate in those markets to earn profits. 
 
