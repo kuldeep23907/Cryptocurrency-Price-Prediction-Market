@@ -16,6 +16,16 @@ A decentralised prediction market for cryptocurrency price where end-users can p
 5. React framework
 6. Mocha Testing
 
+## Directory structure
+
+**client** - react code for UI & integration using web3.js
+**contract** - all smart contracts in solidity
+**migrations** - Migrations file to be used by Truffle to deplot the contract on KOVAN Testnet
+**test** - Unit Testing done in Mocha for the smart contracts
+
+![final-project-consenSys](https://user-images.githubusercontent.com/24249646/102808156-e98f8180-43e5-11eb-89d1-3c08cb673f5e.png)
+
+
 ## How to run locally
 
 A. Clone this repository in your local system using `git clone git@github.com:kuldeep23907/Cryptocurrency-Price-Prediction-Market.git`
