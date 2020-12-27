@@ -1,0 +1,5 @@
+Market Factory Contract Deployed on **KOVAN Testnet**. Address is **0xc6D7bBe218b2c2C4f20c6799CfD331140FB33296**
+
+All Markets created via UI will be deployed on KOVAN testnet only. We can see their address in the Market CARD in UI.
+
+Chainlink Oracle Service exists already in KOVAN Testnet.
