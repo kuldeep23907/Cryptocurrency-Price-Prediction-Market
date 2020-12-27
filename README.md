@@ -67,7 +67,7 @@ When we deploy smart contracts and run the client app to interact with it, we wo
 
 Once the market factory contract is funded with LINK tokens, please follow this demo link https://youtu.be/i65JukIePHY or https://github.com/kuldeep23907/Cryptocurrency-Price-Prediction-Market/blob/main/use_the_dapp.md to know about how to use the dapp.
 
-## :test: How to test the smart contracts
+## :hammer: How to test the smart contracts
 
 As the main smart contracts uses Chainlink Oracles for resolving the markets, so `truffle test` will by default use the `test` network defined in the config file to run the test. Please follow the same.
 
