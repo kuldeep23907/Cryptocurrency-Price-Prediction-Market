@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PricePredictionMarketFactoryContract from "./contracts/PricePredictionMarketFactory.json";
 import MarketContract from "./contracts/Market.json";
+import IERC20Contract from "./contracts/IERC20.json";
 import getWeb3 from "./getWeb3";
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
@@ -54,6 +55,7 @@ const App = () => {
   const [predict, setPredict] = useState({verdict:null, share:0});
   const [selectedMarket, setSelectedMarket] = useState(null);
   const [totalAmountToPay, setTotalAmountToPay] = useState(0);
+  const [linkBal, setlinkBal] = useState(0);
 
   const handleClickOpen = () => {
     setOpenMarket(true);
@@ -85,13 +87,19 @@ const App = () => {
         );
         setMarketFactory(deployedNetwork.address);
 
+        const ecr20Link = new web3.eth.Contract(
+          IERC20Contract.abi,
+          "0xa36085F69e2889c224210F603D836748e7dC0088"
+        );
+        
+        setlinkBal(await ecr20Link.methods.balanceOf(deployedNetwork.address).call());
         setWeb3(web3);
         setContract(instance);
         setAccounts(accounts);
         const allMarkets = await instance.methods.getAllMarkets().call();
         console.log(allMarkets, "all markets");
         setAllMarkets([...allMarkets]);
-
+  
         // Set web3, accounts, and contract to the state, and then proceed with an
         // example of interacting with the contract's methods.
 
@@ -264,13 +272,17 @@ const App = () => {
             <Toolbar>
               <AccountBalanceWalletIcon className={classes.icon} />
               <div style={{display:'flex', justifyContent:'space-between', width:'100%'}}>
-              <Typography variant="h6" color="inherit" noWrap>
+              <span>
                 Address: {accounts[0]}
-              </Typography>
+              </span>
 
-              <Typography variant="h6" color="inherit" noWrap>
+              <span>
                 Market Factory: <span style={{fontSize:'15px'}}>{marketFactory}</span>
-              </Typography>
+              </span>
+
+              <span>
+                Available markets: <span style={{fontSize:'15px'}}>{linkBal/10**17}</span>
+              </span>
 
               </div>
              
@@ -336,13 +348,13 @@ const App = () => {
                         {
                           (market.details.action === '0') ? 
                           
-                          <span> {market.details.token1} will be less than {market.details.amount} USD </span> :
+                          <span> {market.details.token1} will be less than {market.details.amount} USD ?</span> :
 
                           (market.details.action === '1') ? 
 
-                          <span> {market.details.token1} will be more than {market.details.amount} USD </span> :
+                          <span> {market.details.token1} will be more than {market.details.amount} USD ?</span> :
 
-                          <span> {market.details.token1} will be equal to {market.details.amount} USD </span>
+                          <span> {market.details.token1} will be equal to {market.details.amount} USD ?</span>
                         }
                         </Typography>
                         <hr/>

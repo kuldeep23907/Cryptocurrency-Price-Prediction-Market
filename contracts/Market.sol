@@ -73,7 +73,7 @@ contract Market is IMarket,ReentrancyGuard,APIConsumer {
     MarketDetails private M;
     
     mapping(address => Prediction) public predictions;
-    mapping(address => bool) private predictors;
+    mapping(address => bool) public predictors;
     
     constructor (
         address owner,

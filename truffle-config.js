@@ -19,6 +19,14 @@ module.exports = {
       gas: 4500000,
       gasPrice: 10000000000,
     },
+    // since main contarcts are using Chainlink oracles on KOVAN testnet, so we will be using the KOVAN testnet for truffle-test also to ease out the process
+    // it may take few minutes for all test-cases to give a result
+    test: {
+      network_id: 42,
+      gas: 4500000,
+      gasPrice: 10000000000,
+      provider: () => new HDWalletProvider('abuse culture whale flight narrow panther garage sail crime snack custom you', 'https://kovan.infura.io/v3/79bd63570a0542498f6092d601f72ae0')
+    },
   },
   compilers: {
     solc: {
