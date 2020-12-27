@@ -5,6 +5,9 @@ A decentralised prediction market for cryptocurrency price where end-users can p
 
 **Deployed on IPFS: https://rapid-darkness-1064.on.fleek.co/**
 
+IPFS Hash: QmWYdsSJ6zSh6AFvFJQvAJBBhcHW5YrJQEfLWkMa91Wrh8
+
+
 ## :rocket: Features
 1. Users can create a market by selecting the crypto-currency symbol(ETH, BTC, USDC, DAI etc. ), amount in USD, action (less than, more than, equal to) and time interval in seconds.
 2. Users can predict as yes or no for all the existing projects for which participation is still active.
