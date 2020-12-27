@@ -2,6 +2,7 @@
 A decentralised prediction market for cryptocurrency price where end-users can predict for outcomes and earn profits. The market's are resolved using Oracle to avoid any centralised party for market resolution.
 
 **Demo Video: https://youtu.be/i65JukIePHY**
+**Deployed on IPFS: https://rapid-darkness-1064.on.fleek.co/ **
 
 ## :rocket: Features
 1. Users can create a market by selecting the crypto-currency symbol(ETH, BTC, USDC, DAI etc. ), amount in USD, action (less than, more than, equal to) and time interval in seconds.
